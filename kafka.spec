@@ -37,9 +37,15 @@ mkdir -p $RPM_BUILD_ROOT/etc/rc.d/init.d
 install -m 755 %{S:1} $RPM_BUILD_ROOT/etc/rc.d/init.d/kafka
 mkdir -p $RPM_BUILD_ROOT/var/log/kafka
 mkdir -p $RPM_BUILD_ROOT/var/lib/kafka
+mkdir -p $RPM_BUILD_ROOT/etc/sysconfig
+touch $RPM_BUILD_ROOT/etc/sysconfig/kafka
 
 # Change the log directory
 sed -i 's|^log.dirs=/tmp/kafka-logs|log.dirs=/var/lib/kafka|' $RPM_BUILD_ROOT/%{_prefix}/kafka/config/server.properties
+
+# Move config file(s)
+mkdir -p $RPM_BUILD_ROOT/etc/kafka
+mv $RPM_BUILD_ROOT/%{_prefix}/kafka/config/server.properties $RPM_BUILD_ROOT/etc/kafka/
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -77,9 +83,11 @@ fi
 %attr(0755,kafka,kafka) /opt/kafka/bin
 %attr(0755,kafka,kafka) /opt/kafka/libs
 %config(noreplace) %attr(755,kafka,kafka) /opt/kafka/config
+%config(noreplace) %attr(755,kafka,kafka) /etc/kafka
 %attr(0775,root,kafka) /etc/rc.d/init.d/kafka
 %attr(0755,kafka,kafka) %dir /var/log/kafka
 %attr(0755,kafka,kafka) %dir /var/lib/kafka
+%attr(0755,kafka,kafka) /etc/sysconfig/kafka
 
 %doc NOTICE
 %doc LICENSE
