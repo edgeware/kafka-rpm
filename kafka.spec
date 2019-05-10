@@ -46,6 +46,7 @@ sed -i 's|^log.dirs=/tmp/kafka-logs|log.dirs=/var/lib/kafka|' $RPM_BUILD_ROOT/%{
 # Move config file(s)
 mkdir -p $RPM_BUILD_ROOT/etc/kafka
 mv $RPM_BUILD_ROOT/%{_prefix}/kafka/config/server.properties $RPM_BUILD_ROOT/etc/kafka/
+mv $RPM_BUILD_ROOT/%{_prefix}/kafka/config/log4j.properties $RPM_BUILD_ROOT/etc/kafka/
 
 %clean
 rm -rf $RPM_BUILD_ROOT
